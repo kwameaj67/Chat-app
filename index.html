@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Chat System</title>
+
+  <!-- <link rel="stylesheet" href="css/style.css"> -->
+  
+  <!-- <link href="https://fonts.googleapis.com/css?family=Nunito&display=swap" rel="stylesheet"> -->
+  
+  <script defer type="text/javascript" src="http://localhost:3000/socket.io/socket.io.js"></script>
+
+  <script defer type="text/javascript" src="script.js"></script>
+  <!-- <script defer type="text/javascript" src="file.js"></script> -->
+  <!-- <script>
+  var socket = io();
+</script> -->
+<script >
+        document.addEventListener("DOMCOntentLoaded",function(){
+        //client
+        var socket_connect = io.connect();
+        var siofu = new SocketIOFileUpload(socket_connect);
+        //   siofu.listenOnInput(file);
+        //reading file
+        document.getElementById("file-upload").addEventListener("click",siofu.prompt,false);
+        siofu.listenONInput(document.getElementById("file-upload"));
+        siofu.listenONDrop(document.getElementById("file_drop"));
+
+        // Do something on upload progress:
+        siofu.addEventListener("progress", function(event){
+        var percent = event.bytesLoaded / event.file.size * 100;
+        console.log("File is", percent.toFixed(2), "percent loaded");
+    });
+
+        // Do something when a file is uploaded:
+            siofu.addEventListener("complete", function(event){
+            console.log(event.success);
+            console.log(event.file);
+    });
+            siofu.addEventLIstener("error",function(data){
+                if(data.code === 1){
+                    alert("awww! do not upload such a big file");
+                }
+          });
+        },false);
+         
+</script>
+</head>
+   
+<body>
+    <div id="message-container"></div>
+    <input type="text" placeholder="name" id="name"><br/>
+    <input type="text" id="input"><br/>
+    <button type="button" onclick="send()">Send</button><br/>
+  <input id="file-upload" type="file" type="image" onclick="upload();"><br/>
+    <div id="file_drop" dropzone="copy",title="drop files for upload"></div>
+</body>
+</html>
